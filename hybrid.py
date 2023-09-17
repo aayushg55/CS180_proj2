@@ -164,25 +164,41 @@ def add_images(img1, img2):
             combined = img2 + img1
     return combined
 
+def rescale(a):
+    return np.interp(a, (a.min(), a.max()), (0, 1))
+
+def compute_fft(a):
+    fft = np.log(np.abs(np.fft.fftshift(np.fft.fft2(a))))
+    return rescale(fft)
+
 # Creates hybrid image using low frequencies of img1 and high frequencies of img2 
 def hybrid_image(img1, img2, sigma1, sigma2, color1=True, color2=True):
     img2, img1 = align_images(img2, img1)
-    save_img('aligned_'+'stern', img1)
-    save_img('aligned_' +'tongue', img2)
-    img1 = read_img('aligned_'+'stern.jpg', img_dir='part2_out_dir/part2_2')
-    img2 = read_img('aligned_'+'tongue.jpg', img_dir='part2_out_dir/part2_2')
+    # save_img('aligned_'+'stern', img1)
+    # save_img('aligned_' +'tongue', img2)
+    # img1 = read_img('aligned_'+'stern.jpg', img_dir='part2_out_dir/part2_2')
+    # img2 = read_img('aligned_'+'tongue.jpg', img_dir='part2_out_dir/part2_2')
     if not color1:
         img1 = rgb_2_gray(img1)
-
     if not color2:
         img2 = rgb_2_gray(img2)
-    low_pass_filter = create_gaussian_2d(sigma1, opt_ksize(sigma1))
+        
+    fft_inp_img1 = compute_fft(img1)
+    fft_inp_img2 = compute_fft(img2)
+    save_img('fft_inp_img1', fft_inp_img1, grayscale=True)
+    save_img('fft_inp_img2', fft_inp_img2, grayscale=True)
+    plt.imshow(fft_inp_img1)
     
+    low_pass_filter = create_gaussian_2d(sigma1, opt_ksize(sigma1))
     img1_low = convolve_color(low_pass_filter, img1, color=color1)
     img2_high = img2 - convolve_color(create_gaussian_2d(sigma2, opt_ksize(sigma2)), img2, color=color2)
-    
+
+    fft_filtered_img1 = compute_fft(img1_low)
+    fft_filtered_img2 = compute_fft(img2_high)
+    save_img('fft_filtered_img1', fft_filtered_img1, grayscale=True)
+    save_img('fft_filtered_img2', fft_filtered_img2, grayscale=True)
+
     combined = add_images(img1_low, img2_high)
-    
     combined = np.clip(combined, a_min=0, a_max=1)
     return combined
 
@@ -198,11 +214,8 @@ if __name__ == '__main__':
 
     plt.imshow(hybrid)
     plt.show()
-    # save_img('hybird_'+str(sigma1)+'_'+str(sigma2), hybrid)
 
-    # plt.imshow(hybrid)
-    # plt.show()
-    save_img('train'+'_hybird_'+str(sigma1)+'_'+str(sigma2), hybrid)
+    save_img('combined'+'_hybird_'+str(sigma1)+'_'+str(sigma2), hybrid)
 
     # ## Compute and display Gaussian and Laplacian Pyramids
     # ## You also need to supply this function
