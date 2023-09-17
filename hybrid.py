@@ -214,7 +214,7 @@ if __name__ == '__main__':
 
     plt.imshow(hybrid)
     plt.show()
-
+    save_img('fft_final', compute_fft(hybrid), grayscale=True)
     save_img('combined'+'_hybird_'+str(sigma1)+'_'+str(sigma2), hybrid)
 
     # ## Compute and display Gaussian and Laplacian Pyramids
