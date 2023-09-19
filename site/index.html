@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="en"><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="INTUITIVE">
+    <meta name="description" content="">
+    <title>CS 180 Proj 2</title>
+    <link rel="stylesheet" href="nicepage.css" media="screen">
+<link rel="stylesheet" href="style.css" media="screen">
+    <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
+    <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+    <meta name="generator" content="Nicepage 5.17.1, nicepage.com">
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+    <script type="application/ld+json">{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"name": "Site1"
+}</script>
+    <meta name="theme-color" content="#478ac9">
+    <meta property="og:title" content="CS 180 Proj 2">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta data-intl-tel-input-cdn-path="intlTelInput/"></head>
+  <body class="u-body u-xl-mode" data-lang="en">
+    <section class="u-align-center u-clearfix u-gradient u-section-1" src="" id="sec-4bf2">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <h1 class="u-text u-text-default-lg u-text-default-md u-text-default-sm u-text-default-xl u-title u-text-1"> CS 180 Proj 2: Fun With Filters and Frequencies!</h1>
+        <p class="u-large-text u-text u-text-default u-text-variant u-text-2">Aayush Gupta</p>
+      </div>
+    </section>
+    <section class="u-clearfix u-section-2" id="sec-9125">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="fr-view u-align-center u-clearfix u-rich-text u-text u-text-1">
+          <h3 style="text-align: left;">Part 1: Fun with Filters</h3>
+          <h4 style="text-align: left;">Part 1.1: Finite Difference Operator</h4>
+          <p style="text-align: left;">The image derivatives are computed by convolving the finite difference operators D_x and D_y with the image. That is, img_grad_x = img * D_x and img_grad_y = img * D_y, where * is the convolution operator. The magnitude of the gradient is computed by taking the per pixel magnitude of the derivatives in x and y, so img_grad_magnitude = sqrt(img_grad_x^2 + img_grad_y^2). To turn this into an edge image, I binarize the gradient magnitudes with thresholding.</p>
+        </div>
+        <img class="u-image u-image-contain u-image-default u-image-1" src="images/images_in/filters/derivatives_img.jpg" alt="" data-image-width="416" data-image-height="118">
+        <img class="u-image u-image-default u-image-2" src="images/images_in/filters/cameraman.png" alt="" data-image-width="540" data-image-height="542">
+        <div class="u-expanded-width u-list u-list-1">
+          <div class="u-repeater u-repeater-1">
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-1">
+                <img class="u-image u-image-contain u-image-default u-image-3" src="images/part1_out_dir/part1_1/dx_img.jpg" alt="" data-image-width="540" data-image-height="542">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-2">D_x</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-2">
+                <img class="u-image u-image-contain u-image-default u-image-4" src="images/part1_out_dir/part1_1/dx_img.jpg" alt="" data-image-width="3702" data-image-height="3209">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-3">D_y</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-3">
+                <img class="u-image u-image-contain u-image-default u-image-5" src="images/part1_out_dir/part1_1/edge_img.jpg" alt="" data-image-width="3331" data-image-height="2888">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-4">Gradient Magnitude</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-4">
+                <img class="u-image u-image-contain u-image-default u-image-6" src="images/part1_out_dir/part1_1/edge_thresholded.jpg" alt="" data-image-width="540" data-image-height="542">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-5"> Binarized Magnitude  (0.21)<br>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="u-clearfix u-section-3" id="sec-0836">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="fr-view u-align-center u-clearfix u-rich-text u-text u-text-1">
+          <h4 style="text-align: left;">Part 1.2: Derivative of Gaussian (DoG) Filter</h4>
+          <p style="text-align: left;">The gradient magnitudes produced by directly applying the finite difference operators are quite noisy. As such, we first apply a blurring operator — a gaussian — and then convolve the derivatives with this blurred image.</p>
+        </div>
+        <div class="u-expanded-width u-list u-list-1">
+          <div class="u-repeater u-repeater-1">
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-1">
+                <img class="u-image u-image-contain u-image-default u-image-1" src="images/part1_out_dir/part1_2/blurred_dx.jpg" alt="" data-image-width="540" data-image-height="542">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-2">D_x</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-2">
+                <img class="u-image u-image-contain u-image-default u-image-2" src="images/part1_out_dir/part1_2/blurred_dy.jpg" alt="" data-image-width="540" data-image-height="542">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-3">D_y</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-3">
+                <img class="u-image u-image-contain u-image-default u-image-3" src="images/part1_out_dir/part1_2/blurred_edge.jpg" alt="" data-image-width="540" data-image-height="542">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-4">Gradient Magnitude</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-4">
+                <img class="u-image u-image-contain u-image-default u-image-4" src="images/part1_out_dir/part1_2/blurred_edge_thresholded.jpg" alt="" data-image-width="540" data-image-height="542">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-5"> Binarized Magnitude (0.04)<br>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="u-align-left u-text u-text-6">T​​he resulting gradient magnitude image produced by starting with a blurred image has significantly less noise, making it easier to threshold. This is because by applying a Gaussian filter first, we reduce the high frequencies (low pass filter). The threshold can now be lowered to 0.04 from 0.21. Additionally, the edges produced are more prominent and thicker.<br>
+          <br>We can get the same effect with a single convolution instead of two by creating ​derivatives&nbsp;of gaussian filters from convolving the gaussian with D_x and D_y. We can see this results in the same final gradient magnitudes as before.
+        </p>
+        <div class="u-expanded-width u-list u-list-2">
+          <div class="u-repeater u-repeater-2">
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-5">
+                <img class="u-image u-image-contain u-image-default u-image-5" src="images/part1_out_dir/part1_2/combined_blurred_dx.jpg" alt="" data-image-width="540" data-image-height="542">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-7">D_x</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-6">
+                <img class="u-image u-image-contain u-image-default u-image-6" src="images/part1_out_dir/part1_2/combined_blurred_dy.jpg" alt="" data-image-width="3702" data-image-height="3209">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-8">D_y</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-7">
+                <img class="u-image u-image-contain u-image-default u-image-7" src="images/part1_out_dir/part1_2/combined_blurred_edge.jpg" alt="" data-image-width="3331" data-image-height="2888">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-9">Gradient Magnitude</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-8">
+                <img class="u-image u-image-contain u-image-default u-image-8" src="images/part1_out_dir/part1_2/combined_blurred_edge_thresholded.jpg" alt="" data-image-width="540" data-image-height="542">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-10"> Binarized Magnitude  (0.04)<br>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="u-align-center u-clearfix u-section-4" id="sec-69ff">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="u-border-3 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div>
+        <div class="fr-view u-align-center u-clearfix u-rich-text u-text u-text-1">
+          <h3 style="text-align: left;">
+            <span style="font-size: 2.25rem;">Part 2: Fun with Frequencies!</span>
+          </h3>
+          <h4 style="text-align: left;">Part 2.1: Image "Sharpening"</h4>
+          <p style="text-align: left;">Image sharpening is implemented using the unsharp mask. This is done by subtracting a blurred version of the image from the original image to get the high frequencies of the image. We then add these high frequencies scaled by some <span style="font-style: italic;">alpha</span> to the original image to "sharpen" it.
+          </p>
+        </div>
+        <div class="u-expanded-width u-list u-list-1">
+          <div class="u-repeater u-repeater-1">
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-1">
+                <img alt="" class="u-image u-image-default u-image-1" data-image-width="300" data-image-height="300" src="images/images_in/filters/taj.jpg">
+                <p class="u-align-center u-text u-text-2">Original</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-2">
+                <img alt="" class="u-image u-image-default u-image-2" data-image-width="390" data-image-height="341" src="images/part2_out_dir/part2_1/">
+                <p class="u-align-center u-text u-text-3">Blurred</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-3">
+                <img alt="" class="u-image u-image-default u-image-3" data-image-width="390" data-image-height="341" src="images/part2_out_dir/part2_1/">
+                <p class="u-align-center u-text u-text-4">High Frequencies</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-expanded-width u-list u-list-2">
+          <div class="u-repeater u-repeater-2">
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-4">
+                <img class="u-image u-image-contain u-image-default u-image-4" src="images/part2_out_dir/part2_1/taj_1.jpg" alt="" data-image-width="300" data-image-height="300">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-5">alpha = 1</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-5">
+                <img class="u-image u-image-contain u-image-default u-image-5" src="images/part2_out_dir/part2_1/taj_2.jpg" alt="" data-image-width="3702" data-image-height="3209">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-6">alpha = 2</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-6">
+                <img class="u-image u-image-contain u-image-default u-image-6" src="images/part2_out_dir/part2_1/taj_3.jpg" alt="" data-image-width="3331" data-image-height="2888">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-7">alpha = 3</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="u-align-center u-clearfix u-section-5" id="carousel_38de">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="fr-view u-align-center u-clearfix u-rich-text u-text u-text-1">
+          <p style="text-align: left;">Extra Examples:</p>
+        </div>
+        <div class="u-expanded-width u-list u-list-1">
+          <div class="u-repeater u-repeater-1">
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-1">
+                <img alt="" class="u-expanded-width-lg u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-image u-image-default u-image-1" data-image-width="626" data-image-height="468" src="images/images_in/filters/animal.jpg">
+                <p class="u-align-center u-text u-text-2">Original</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-2">
+                <img alt="" class="u-expanded-width-lg u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-image u-image-default u-image-2" data-image-width="390" data-image-height="341" src="images/part2_out_dir/part2_1/">
+                <p class="u-align-center u-text u-text-3">Blurred</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-3">
+                <img alt="" class="u-expanded-width-lg u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-image u-image-default u-image-3" data-image-width="390" data-image-height="341" src="images/part2_out_dir/part2_1/">
+                <p class="u-align-center u-text u-text-4">High Frequencies</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-expanded-width u-list u-list-2">
+          <div class="u-repeater u-repeater-2">
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-4">
+                <img class="u-image u-image-contain u-image-default u-image-4" src="images/part2_out_dir/part2_1/animal_1.jpg" alt="" data-image-width="626" data-image-height="468">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-5">alpha = 1</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-5">
+                <img class="u-image u-image-contain u-image-default u-image-5" src="images/part2_out_dir/part2_1/animal_2.jpg" alt="" data-image-width="626" data-image-height="468">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-6">alpha = 2</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-6">
+                <img class="u-image u-image-contain u-image-default u-image-6" src="images/part2_out_dir/part2_1/animal_3.jpg" alt="" data-image-width="3331" data-image-height="2888">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-7">alpha = 3</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="u-align-left u-text u-text-8"> Starting with a normal image, I blur it and then try to sharpen it from this blurred version:</p>
+        <div class="u-expanded-width u-list u-list-3">
+          <div class="u-repeater u-repeater-3">
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-7">
+                <img class="u-image u-image-contain u-image-default u-image-7" src="images/images_in/filters/mountain.jpg" alt="" data-image-width="950" data-image-height="630">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-9">Original</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-8">
+                <img class="u-image u-image-contain u-image-default u-image-8" src="images/part2_out_dir/part2_1/mountain_blurred.jpg" alt="" data-image-width="950" data-image-height="630">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-10">Blurred</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-9">
+                <img class="u-image u-image-contain u-image-default u-image-9" src="images/part2_out_dir/part2_1/mountain_3.jpg" alt="" data-image-width="950" data-image-height="630">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-11">Sharpened from blurred (alpha = 3)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="u-clearfix u-section-6" id="carousel_02e2">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="u-expanded-width u-list u-list-1">
+          <div class="u-repeater u-repeater-1">
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-1">
+                <img class="u-image u-image-contain u-image-default u-image-1" src="images/images_in/filters/hk.webp" alt="" data-image-width="945" data-image-height="530">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-1">Original</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-2">
+                <img class="u-image u-image-contain u-image-default u-image-2" src="images/part2_out_dir/part2_1/hk_blurred.jpg" alt="" data-image-width="945" data-image-height="530">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-2">Blurred</p>
+              </div>
+            </div>
+            <div class="u-container-style u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-3">
+                <img class="u-image u-image-contain u-image-default u-image-3" src="images/part2_out_dir/part2_1/hk_3.jpg" alt="" data-image-width="945" data-image-height="530">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-3"> Sharpened from blurred (alpha = 3)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="u-clearfix u-section-7" id="sec-8187">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="fr-view u-align-center u-clearfix u-rich-text u-text u-text-1">
+          <h4 style="text-align: left;">Part 2.2: Hybrid Images</h4>
+          <p style="text-align: left;">The basic idea is that high frequency tends to dominate perception when it is available, but, at a distance, only the low frequency (smooth) part of the signal can be seen. By blending the high frequency portion of one image with the low-frequency portion of another, we get a hybrid image that leads to different interpretations at different distances. To get the low frequencies, we can convolve the image with a gaussian, and to get the high frequencies, we can subtract the original image from these low frequencies.&nbsp;</p>
+          <p style="text-align: left;">In the following examples, the image that has its low frequencies used is on the left, and the image which has its high frequencies used is second.</p>
+        </div>
+        <div class="u-list u-list-1">
+          <div class="u-repeater u-repeater-1">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-1">
+                <img class="u-image u-image-contain u-image-default u-image-1" src="images/images_in/hybrid/DerekPicture.jpg" alt="" data-image-width="732" data-image-height="1024">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-2">Derek</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-2">
+                <img class="u-image u-image-contain u-image-default u-image-2" src="images/images_in/hybrid/nutmeg.jpg" alt="" data-image-width="1408" data-image-height="1056">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-3">Nutmeg</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-3">
+                <img class="u-image u-image-contain u-image-default u-image-3" src="images/part2_out_dir/part2_2/cat_color_both_hybird_12_6.jpg" alt="" data-image-width="741" data-image-height="1344">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-4">Hybrid</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-2">
+          <div class="u-repeater u-repeater-2">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-4">
+                <img class="u-image u-image-contain u-image-default u-image-4" src="images/part2_out_dir/part2_2//cat_guy_from_far.jpg" alt="" data-image-width="89" data-image-height="150">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-5">From far</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="u-align-left u-text u-text-6"> In this example, I implemented Bells and Whistles by exploring using color. Below is an example of all 4 combinations of using color. Overall, using color in both the low frequency and high frequency images gave good results. However, if the color profiles of both images are very different from one another, it is difficult to get the colors of both images to show well, and instead one image's generally dominates.&nbsp;</p>
+        <div class="u-list u-list-3">
+          <div class="u-repeater u-repeater-3">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-5">
+                <img class="u-image u-image-contain u-image-default u-image-5" src="images/part2_out_dir/part2_2/cat_color_none_hybird_12_6.jpg" alt="" data-image-width="732" data-image-height="1024">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-7">No color in either</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-6">
+                <img class="u-image u-image-contain u-image-default u-image-6" src="images/part2_out_dir/part2_2/cat_color_first_hybird_12_6.jpg" alt="" data-image-width="741" data-image-height="1344">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-8">Color in Derek</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-7">
+                <img class="u-image u-image-contain u-image-default u-image-7" src="images/part2_out_dir/part2_2/cat_color_second_hybird_12_6.jpg" alt="" data-image-width="741" data-image-height="1344">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-9">Color in Nutmeg</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-top u-container-layout-8">
+                <img class="u-image u-image-contain u-image-default u-image-8" src="images/part2_out_dir/part2_2/cat_color_both_hybird_12_6.jpg" alt="" data-image-width="741" data-image-height="1344">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-10">Color in both<br>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-4">
+          <div class="u-repeater u-repeater-4">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-9">
+                <img class="u-image u-image-contain u-image-default u-image-9" src="images/images_in/hybrid/apple_stem.jpeg" alt="" data-image-width="612" data-image-height="612">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-11">Apple</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-10">
+                <img class="u-image u-image-contain u-image-default u-image-10" src="images/images_in/hybrid/apple_logo.jpg" alt="" data-image-width="683" data-image-height="410">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-12">Apple logo</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-11">
+                <img class="u-image u-image-contain u-image-default u-image-11" src="images/part2_out_dir/part2_2/combined_apple__hybird_12_2.jpg" alt="" data-image-width="586" data-image-height="410">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-13">Hybrid</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-5">
+          <div class="u-repeater u-repeater-5">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-12">
+                <img class="u-image u-image-contain u-image-default u-image-12" src="images/part2_out_dir/part2_2/apple_from_far.jpg" alt="" data-image-width="150" data-image-height="109">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-14">From far</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="u-clearfix u-section-8" id="sec-a123">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <h5 class="u-align-left u-text u-text-1">Best example with frequency analysis:</h5>
+        <div class="u-expanded-width u-list u-list-1">
+          <div class="u-repeater u-repeater-1">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-1">
+                <img class="u-expanded-width u-image u-image-contain u-image-default u-image-1" src="images/images_in/hybrid/train_old.jpg" alt="" data-image-width="698" data-image-height="445">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-2">Poland Cable Car 1939</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-2">
+                <img class="u-expanded-width u-image u-image-contain u-image-default u-image-2" src="images/part2_out_dir/part2_2/fft_inp_img1.jpg" alt="" data-image-width="698" data-image-height="445">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-3"> Log Magnitude FFT</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-3">
+                <img class="u-expanded-width u-image u-image-contain u-image-default u-image-3" src="images/part2_out_dir/part2_2/img1_low.jpg" alt="" data-image-width="698" data-image-height="445">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-4">Low Frequencies</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-4">
+                <img class="u-expanded-width u-image u-image-contain u-image-default u-image-4" src="images/part2_out_dir/part2_2/fft_filtered_img1.jpg" alt="" data-image-width="698" data-image-height="445">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-5"> Log Magnitude FFT of Low Frequencies<br>
+                </p>
+              </div>
+            </div>
+            <div class="u-align-left u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-5">
+                <img class="u-expanded-width u-image u-image-contain u-image-default u-image-5" src="images/images_in/hybrid/train_new.jpg" alt="" data-image-width="698" data-image-height="445">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-6">Poland Bus Today</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-6">
+                <img class="u-expanded-width u-image u-image-contain u-image-default u-image-6" src="images/part2_out_dir/part2_2/fft_inp_img2.jpg" alt="" data-image-width="698" data-image-height="445">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-7"> Log Magnitude FFT</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-7">
+                <img class="u-expanded-width u-image u-image-contain u-image-default u-image-7" src="images/part2_out_dir/part2_2/img2_high.jpg" alt="" data-image-width="3331" data-image-height="2888">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-8">High Frequencies</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-8">
+                <img class="u-expanded-width u-image u-image-contain u-image-default u-image-8" src="images/part2_out_dir/part2_2/fft_filtered_img2.jpg" alt="" data-image-width="3331" data-image-height="2888">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-9"> Log Magnitude FFT of High Frequencies</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-expanded-width u-list u-list-2">
+          <div class="u-repeater u-repeater-2">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-9">
+                <img class="u-image u-image-contain u-image-default u-image-9" src="images/part2_out_dir/part2_2/combined_train__hybird_6_15.jpg" alt="" data-image-width="698" data-image-height="445">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-10">Poland Bus Hybrid</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-10">
+                <img class="u-image u-image-contain u-image-default u-image-10" src="images/part2_out_dir/part2_2/fft_final.jpg" alt="" data-image-width="698" data-image-height="445">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-11">Log Magnitude FFT<br>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-3">
+          <div class="u-repeater u-repeater-3">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-11">
+                <img class="u-image u-image-contain u-image-default u-image-11" src="images/part2_out_dir/part2_2/train_from_far.jpg" alt="" data-image-width="150" data-image-height="97">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-12">From far</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="u-align-left u-text u-text-13">Here is an example that did not give as nice of a hybrid image. The main cause of all the artifcats is that the faces are not well aligned due to the head angles being different in both images. It still has the 'hybrid' effect in that the low frequency image becomes dominant at a distance, but the hybrid image is not well aligned and has many artifacts.</p>
+        <div class="u-list u-list-4">
+          <div class="u-repeater u-repeater-4">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-12">
+                <img class="u-image u-image-contain u-image-default u-image-12" src="images/images_in/hybrid/stern.jpg" alt="" data-image-width="200" data-image-height="201">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-14">Stern Face</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-13">
+                <img class="u-image u-image-contain u-image-default u-image-13" src="images/images_in/hybrid/tongue.jpg" alt="" data-image-width="200" data-image-height="201">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-15">Tongue Sticking Out</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-14">
+                <img class="u-image u-image-contain u-image-default u-image-14" src="images/part2_out_dir/part2_2/expressions_hybird_2_2.jpg" alt="" data-image-width="202" data-image-height="213">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-16">Hybrid</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-5">
+          <div class="u-repeater u-repeater-5">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-15">
+                <img class="u-image u-image-contain u-image-default u-image-15" src="images/part2_out_dir/part2_2/expressions_from_far.jpg" alt="" data-image-width="150" data-image-height="97">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-17">From far</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="u-clearfix u-section-9" id="sec-0358">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="fr-view u-align-center u-clearfix u-rich-text u-text u-text-1">
+          <h4 style="text-align: left;">Part 2.3: Gaussian and Laplacian Stacks</h4>
+          <p style="text-align: left;">To create a gaussian stack, I take the original image and repeatedly convolve it with a gaussian filter. Each successive image in the stack consists of lower and lower frequencies. To create a Laplacian stack, I take the difference of consecutive image in the gaussian stack. The final image in the stack consists of the lowest frequencies. The Laplacian stack thus consists of bandpass images. Collapsing the Laplacian stack, or adding together all the images, reconstructs the original image. I extend this to color for all examples by processing each channel separately.</p>
+          <p style="text-align: left;">The original gaussian &amp; Laplacian stacks for the apple and orange image are visualized below.</p>
+        </div>
+        <div class="u-list u-list-1">
+          <div class="u-repeater u-repeater-1">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-1">
+                <img class="u-image u-image-contain u-image-default u-image-1" src="images/part2_out_dir/part2_3/apple_gaussian.jpg" alt="" data-image-width="990" data-image-height="169">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-2">Apple gaussian stack</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-2">
+          <div class="u-repeater u-repeater-2">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-2">
+                <img class="u-image u-image-contain u-image-default u-image-2" src="images/part2_out_dir/part2_3/apple_laplacian.jpg" alt="" data-image-width="990" data-image-height="169">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-3">Apple Laplacian stack</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-3">
+          <div class="u-repeater u-repeater-3">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-3">
+                <img class="u-image u-image-contain u-image-default u-image-3" src="images/part2_out_dir/part2_3/orange_gaussian.jpg" alt="" data-image-width="990" data-image-height="169">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-4">Orange gaussian stack</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-4">
+          <div class="u-repeater u-repeater-4">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-4">
+                <img class="u-image u-image-contain u-image-default u-image-4" src="images/part2_out_dir/part2_3/orange_laplacian.jpg" alt="" data-image-width="990" data-image-height="169">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-5">Orange Laplacian stack</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="u-clearfix u-section-10" id="sec-68ba">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="fr-view u-align-center u-clearfix u-rich-text u-text u-text-1">
+          <h4 style="text-align: left;">Part 2.4: Multiresolution Blending</h4>
+          <p style="text-align: left;">To blend images, we first need a gaussian stack of the mask which represents how the images will be merged. We can then multiply our Laplacian stacks of the images with their corresponding versions of the mask to create intermediate masked stacks. We can then collapse both intermediate stacks and sum them to get the final result.</p>
+          <h5 style="text-align: left;">
+            <span style="font-weight: 700;">Oraple:</span>
+          </h5>
+        </div>
+        <div class="u-list u-list-1">
+          <div class="u-repeater u-repeater-1">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-1">
+                <img class="u-image u-image-contain u-image-default u-image-1" src="images/part2_out_dir/part2_3/apple_masked_stack.jpg" alt="" data-image-width="990" data-image-height="145">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-2">Apple Masked stack</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-2">
+          <div class="u-repeater u-repeater-2">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-2">
+                <img class="u-image u-image-contain u-image-default u-image-2" src="images/part2_out_dir/part2_3/orange_masked_stack.jpg" alt="" data-image-width="990" data-image-height="145">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-3"> Orange Masked stack</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-3">
+          <div class="u-repeater u-repeater-3">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-3">
+                <img class="u-image u-image-contain u-image-default u-image-3" src="images/part2_out_dir/part2_3/oraple_masked_stack.jpg" alt="" data-image-width="990" data-image-height="145">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-4"> Oraple Masked stack</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-4">
+          <div class="u-repeater u-repeater-4">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-4">
+                <img class="u-image u-image-contain u-image-default u-image-4" src="images/part2_out_dir/part2_4/oraple.jpg" alt="" data-image-width="300" data-image-height="300">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-5">Final image</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="u-clearfix u-section-11" id="sec-456f">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="fr-view u-clearfix u-rich-text u-text u-text-1">
+          <p>To create masks in the following examples, I used Meta's Segment Anything Model (SAM).</p>
+          <h5>
+            <span style="font-weight: 700;">Summertime snowman:</span>
+          </h5>
+        </div>
+        <div class="u-list u-list-1">
+          <div class="u-repeater u-repeater-1">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-1">
+                <img class="u-image u-image-contain u-image-default u-image-1" src="images/images_in/blends/snowman.jpg" alt="" data-image-width="450" data-image-height="300">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-2">Snowman</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-2">
+                <img class="u-image u-image-contain u-image-default u-image-2" src="images/images_in/blends/forest_resized.jpg" alt="" data-image-width="1500" data-image-height="994">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-3">Forest</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-3">
+                <img class="u-image u-image-contain u-image-default u-image-3" src="images/images_in/blends/snowman_mask_gray.jpg" alt="" data-image-width="450" data-image-height="300">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-4">Mask</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-2">
+          <div class="u-repeater u-repeater-2">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-4">
+                <img class="u-image u-image-contain u-image-default u-image-4" src="images/part2_out_dir/part2_4/summertime_snowman.jpg" alt="" data-image-width="450" data-image-height="300">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-5">Final image</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fr-view u-clearfix u-rich-text u-text u-text-6">
+          <h5>
+            <span style="font-weight: 700;">Spongebob out of water:</span>
+          </h5>
+        </div>
+        <div class="u-list u-list-3">
+          <div class="u-repeater u-repeater-3">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-5">
+                <img class="u-image u-image-contain u-image-default u-image-5" src="images/images_in/blends/spongebob_resized.jpg" alt="" data-image-width="540" data-image-height="360">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-7">Spongebob</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-6">
+                <img class="u-image u-image-contain u-image-default u-image-6" src="images/images_in/blends/beach2.jpg" alt="" data-image-width="540" data-image-height="360">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-8">Beach</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-7">
+                <img class="u-image u-image-contain u-image-default u-image-7" src="images/images_in/blends/spongebob_mask_gray.jpg" alt="" data-image-width="540" data-image-height="360">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-9">Mask</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-4">
+          <div class="u-repeater u-repeater-4">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-8">
+                <img class="u-image u-image-contain u-image-default u-image-8" src="images/part2_out_dir/part2_4/spongebob_out_of_water.jpg" alt="" data-image-width="540" data-image-height="360">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-10">Final image</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fr-view u-clearfix u-rich-text u-text u-text-11">
+          <h5>
+            <span style="font-weight: 700;">Sunset in NYC:</span>
+          </h5>
+        </div>
+        <div class="u-list u-list-5">
+          <div class="u-repeater u-repeater-5">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-9">
+                <img class="u-image u-image-contain u-image-default u-image-9" src="images/images_in/blends/sunset_resized.jpg" alt="" data-image-width="540" data-image-height="360">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-12">Sunset</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-10">
+                <img class="u-image u-image-contain u-image-default u-image-10" src="images/images_in/blends/nyc.jpg" alt="" data-image-width="540" data-image-height="360">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-13">NYC</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-11">
+                <img class="u-image u-image-contain u-image-default u-image-11" src="images/images_in/blends/nyc_mask.jpg" alt="" data-image-width="540" data-image-height="360">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-14">Mask</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-6">
+          <div class="u-repeater u-repeater-6">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-12">
+                <img class="u-image u-image-contain u-image-default u-image-12" src="images/part2_out_dir/part2_4/sunset_nyc.jpg" alt="" data-image-width="540" data-image-height="360">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-15">Final image</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fr-view u-clearfix u-rich-text u-text u-text-16">
+          <h5>
+            <span style="font-weight: 700;">Favorite Result: NYC at night</span>
+          </h5>
+        </div>
+        <div class="u-list u-list-7">
+          <div class="u-repeater u-repeater-7">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-13">
+                <img class="u-image u-image-contain u-image-default u-image-13" src="images/images_in/blends/night_sky_resized.jpg" alt="" data-image-width="540" data-image-height="360">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-17">Night Sky</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-14">
+                <img class="u-image u-image-contain u-image-default u-image-14" src="images/images_in/blends/nyc.jpg" alt="" data-image-width="540" data-image-height="360">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-18">NYC</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-valign-bottom u-container-layout-15">
+                <img class="u-image u-image-contain u-image-default u-image-15" src="images/images_in/blends/nyc_mask.jpg" alt="" data-image-width="540" data-image-height="360">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-19">Mask</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-8">
+          <div class="u-repeater u-repeater-8">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-16">
+                <img class="u-image u-image-contain u-image-default u-image-16" src="images/part2_out_dir/part2_3/night_sky_masked_stack.jpg" alt="" data-image-width="990" data-image-height="103">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-20">Night Sky Masked stack</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-17">
+                <img class="u-image u-image-contain u-image-default u-image-17" src="images/part2_out_dir/part2_3/nyc_masked_stack.jpg" alt="" data-image-width="990" data-image-height="103">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-21">NYC Masked stack</p>
+              </div>
+            </div>
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-18">
+                <img class="u-image u-image-contain u-image-default u-image-18" src="images/part2_out_dir/part2_3/night_nyc_masked_stack.jpg" alt="" data-image-width="990" data-image-height="145">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-22">Combined Masked stack</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-list u-list-9">
+          <div class="u-repeater u-repeater-9">
+            <div class="u-container-style u-custom-item u-list-item u-repeater-item">
+              <div class="u-container-layout u-similar-container u-container-layout-19">
+                <img class="u-image u-image-contain u-image-default u-image-19" src="images/part2_out_dir/part2_4/night_nyc.jpg" alt="" data-image-width="540" data-image-height="360">
+                <p class="u-align-center u-small-text u-text u-text-default u-text-variant u-text-23">Final image</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="u-border-3 u-border-grey-dark-1 u-line u-line-horizontal u-line-1"></div>
+      </div>
+    </section>
+    <section class="u-align-left u-clearfix u-section-12" id="sec-e4ef">
+      <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="fr-view u-clearfix u-rich-text u-text u-text-1">
+          <h3 style="text-align: left;">Reflection</h3>
+          <p style="text-align: left;">I learned how important frequencies are in how images are percieved and processed. It's amazing to me that the same image can appear differently to us depending on our viewing distance, and that creating such hybrid images is as easy as blending low frequencies from one image and high frequencies from another.</p>
+        </div>
+      </div>
+    </section>
+    
+
+  
+</body></html>

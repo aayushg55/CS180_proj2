@@ -67,7 +67,7 @@ def match_img_size(im1, im2):
     # Make images the same size
     h1, w1, c1 = im1.shape
     h2, w2, c2 = im2.shape
-    print(im1.shape, im2.shape)
+    print(im1.shape, im2.shape, 'in match img')
     if h1 < h2:
         im2 = im2[int(np.floor((h2-h1)/2.)) : -int(np.ceil((h2-h1)/2.)), :, :]
     elif h1 > h2:
@@ -89,6 +89,7 @@ def align_images(im1, im2):
 
     im1, im2 = rescale_images(im1, im2, pts)
     im1, angle = rotate_im1(im1, im2, pts)
+    print('after rotate')
     im1, im2 = match_img_size(im1, im2)
     return im1, im2
 ############################################
@@ -168,16 +169,19 @@ def rescale(a):
     return np.interp(a, (a.min(), a.max()), (0, 1))
 
 def compute_fft(a):
+    if len(a.shape) == 3:
+        a = rgb_2_gray(a)
     fft = np.log(np.abs(np.fft.fftshift(np.fft.fft2(a))))
+    print(fft.shape)
     return rescale(fft)
 
 # Creates hybrid image using low frequencies of img1 and high frequencies of img2 
 def hybrid_image(img1, img2, sigma1, sigma2, color1=True, color2=True):
-    img2, img1 = align_images(img2, img1)
-    # save_img('aligned_'+'stern', img1)
-    # save_img('aligned_' +'tongue', img2)
-    # img1 = read_img('aligned_'+'stern.jpg', img_dir='part2_out_dir/part2_2')
-    # img2 = read_img('aligned_'+'tongue.jpg', img_dir='part2_out_dir/part2_2')
+    # img2, img1 = align_images(img2, img1)
+    # save_img('aligned_'+'apple', img1)
+    # save_img('aligned_' +'apple_logo', img2)
+    # img1 = read_img('aligned_'+'apple.jpg', img_dir='part2_out_dir/part2_2')
+    # img2 = read_img('aligned_'+'apple_logo.jpg', img_dir='part2_out_dir/part2_2')
     if not color1:
         img1 = rgb_2_gray(img1)
     if not color2:
@@ -193,6 +197,9 @@ def hybrid_image(img1, img2, sigma1, sigma2, color1=True, color2=True):
     img1_low = convolve_color(low_pass_filter, img1, color=color1)
     img2_high = img2 - convolve_color(create_gaussian_2d(sigma2, opt_ksize(sigma2)), img2, color=color2)
 
+    save_img('img1_low', img1_low, grayscale=False)
+    save_img('img2_high', img2_high, grayscale=False)
+
     fft_filtered_img1 = compute_fft(img1_low)
     fft_filtered_img2 = compute_fft(img2_high)
     save_img('fft_filtered_img1', fft_filtered_img1, grayscale=True)
@@ -205,19 +212,17 @@ def hybrid_image(img1, img2, sigma1, sigma2, color1=True, color2=True):
 if __name__ == '__main__':
     # First load images
 
-    im1 = read_img('stern.jpg')
-    im2 = read_img('tongue.jpg')
+    im1 = read_img('train_old.jpg')
+    im2 = read_img('train_new.jpg')
+    # im2 = read_img('apple_stem.jpeg')
+    # im1 = read_img('apple_logo.jpg').astype('float32')
+    # im2 = cv2.cvtColor(im2, cv2.COLOR_GRAY2RGB)
 
-    sigma1 = 2
-    sigma2 = 2
+    sigma1 = 6
+    sigma2 = 15
     hybrid = hybrid_image(im1, im2, sigma1, sigma2, color1=True, color2=True)
 
     plt.imshow(hybrid)
     plt.show()
     save_img('fft_final', compute_fft(hybrid), grayscale=True)
-    save_img('combined'+'_hybird_'+str(sigma1)+'_'+str(sigma2), hybrid)
-
-    # ## Compute and display Gaussian and Laplacian Pyramids
-    # ## You also need to supply this function
-    # N = 5 # suggested number of pyramid levels (your choice)
-    # pyramids(hybrid, N)
+    save_img('combined_'+'train_'+'_hybird_'+str(sigma1)+'_'+str(sigma2), hybrid)
