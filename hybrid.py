@@ -177,7 +177,7 @@ def compute_fft(a):
 
 # Creates hybrid image using low frequencies of img1 and high frequencies of img2 
 def hybrid_image(img1, img2, sigma1, sigma2, color1=True, color2=True):
-    # img2, img1 = align_images(img2, img1)
+    img2, img1 = align_images(img2, img1)
     # save_img('aligned_'+'apple', img1)
     # save_img('aligned_' +'apple_logo', img2)
     # img1 = read_img('aligned_'+'apple.jpg', img_dir='part2_out_dir/part2_2')
